@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الماسح الضوئي</string>
+
+    <string name="enter_text">ادخل النص الذي تريده</string>
+    <string name="generate">اصنع باركود</string>
+    <string name="qr">الباركود</string>
+    <string name="scan">مسح</string>
+    <string name="save">حفظ</string>
+    <string name="choose_from_gallery">المعرض</string>
+    <string name="saved_success">تم حفظ الصورة بنجاح</string>
+    <string name="error_in_save">حدث خطأ في حفظ الصورة الي المعرض</string>
+    <string name="scan_result">نتيجة المسح </string>
+    <string name="copy">نسخ النص</string>
+    <string name="invalid_image">هذه الصورة غير مدعومة</string>
+    <string name="data_required">يجب ان تكتب نصا لكي يتم تحويله الي باركود</string>
+    <string name="not_found_image">يجب ان تنشئ باركود لكي يتم حفظه</string>
+</resources>

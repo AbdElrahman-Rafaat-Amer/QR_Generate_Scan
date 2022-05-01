@@ -4,4 +4,13 @@
     <string name="generate">Generate QR</string>
     <string name="qr">QR Code</string>
     <string name="scan">Scan</string>
+    <string name="save">Save</string>
+    <string name="choose_from_gallery">Gallery</string>
+    <string name="saved_success">Image Saved Success</string>
+    <string name="error_in_save">Error in save image to gallery</string>
+    <string name="scan_result">Scan result</string>
+    <string name="copy">Copy</string>
+    <string name="invalid_image">This image is not valid</string>
+    <string name="data_required">You must enter text to generate QR code</string>
+    <string name="not_found_image">You must generate image to save it</string>
 </resources>
