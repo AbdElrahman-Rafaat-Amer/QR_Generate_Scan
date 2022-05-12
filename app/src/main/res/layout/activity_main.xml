@@ -20,10 +20,10 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/background_button"
             android:hint="@string/enter_text"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:padding="15dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/white" />
 
         <Button
             android:id="@+id/generate_code"

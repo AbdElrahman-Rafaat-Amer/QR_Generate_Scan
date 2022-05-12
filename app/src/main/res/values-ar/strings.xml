@@ -15,4 +15,12 @@
     <string name="invalid_image">هذه الصورة غير مدعومة</string>
     <string name="data_required">يجب ان تكتب نصا لكي يتم تحويله الي باركود</string>
     <string name="not_found_image">يجب ان تنشئ باركود لكي يتم حفظه</string>
+    <string name="cancel">إلغاء</string>
+    <string name="call">اتصال</string>
+    <string name="add_to_contacts">حفظ في جهات الإتصال</string>
+    <string name="open_link">فتح الرايط</string>
+    <string name="send_email">ارسل بريد الكتروني</string>
+    <string name="search">بحث على الإنترنت</string>
+    <string name="copied_success">تم النسخ</string>
+    <string name="error_in_generate">البيانات كبيرة جدًا</string>
 </resources>

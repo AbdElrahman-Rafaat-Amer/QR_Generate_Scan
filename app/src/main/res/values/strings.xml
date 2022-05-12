@@ -13,4 +13,12 @@
     <string name="invalid_image">This image is not valid</string>
     <string name="data_required">You must enter text to generate QR code</string>
     <string name="not_found_image">You must generate image to save it</string>
+    <string name="cancel">Cancel</string>
+    <string name="call">Call</string>
+    <string name="add_to_contacts">Add to contacts</string>
+    <string name="open_link">Open link</string>
+    <string name="send_email">Send email</string>
+    <string name="search">Search</string>
+    <string name="copied_success">Copied success</string>
+    <string name="error_in_generate">Data too big</string>
 </resources>
