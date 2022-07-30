@@ -23,4 +23,5 @@
     <string name="search">بحث على الإنترنت</string>
     <string name="copied_success">تم النسخ</string>
     <string name="error_in_generate">البيانات كبيرة جدًا</string>
+    <string name="data_not_complete">عدد الحروف لا يحب أن يقل عن 5 حروف</string>
 </resources>

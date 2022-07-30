@@ -1,5 +1,5 @@
 # QR_Generate_Scan
- This app for generate and scan Qr codes
+This app for generate and scan Qr codes
  
 You can write a text and create a barcode equivalent to it
 

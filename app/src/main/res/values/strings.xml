@@ -21,4 +21,5 @@
     <string name="search">Search</string>
     <string name="copied_success">Copied success</string>
     <string name="error_in_generate">Data too big</string>
+    <string name="data_not_complete">The length of word must be 5 letters or more</string>
 </resources>

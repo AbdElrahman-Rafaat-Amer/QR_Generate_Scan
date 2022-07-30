@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 
 import android.app.SearchManager;
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
 import android.text.method.ScrollingMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -29,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,13 +45,10 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import java.io.BufferedReader;
 import java.io.File;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 
 import java.net.URL;
@@ -95,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             String data = editText.getText().toString().trim();
             if (data.isEmpty()) {
                 editText.setError(getString(R.string.data_required));
+            }else if (data.length() < 5) {
+                editText.setError(getString(R.string.data_not_complete));
             } else {
                 QRGEncoder encoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 1000);
                 try {
@@ -386,12 +382,12 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "addDialogNote: copied success");
     }
 
-    public void getOpenWhatsIntent() {
+    /*public void getOpenWhatsIntent() {
         String url = "https://api.whatsapp.com/send?phone=" + "+02011518483341";
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
     }
-
+*/
 
 }
