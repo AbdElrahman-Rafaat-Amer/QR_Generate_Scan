@@ -1,4 +1,4 @@
-package com.example.qrapp;
+package com.abdelrahman.rafaat.qrapp;
 
 import org.junit.Test;
 

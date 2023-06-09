@@ -1,4 +1,4 @@
-package com.example.qrapp;
+package com.abdelrahman.rafaat.qrapp;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.qrapp", appContext.getPackageName());
+        assertEquals("com.abdelrahman.rafaat.qrapp", appContext.getPackageName());
     }
 }
