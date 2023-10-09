@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.qrapp;
+package com.abdelrahman.raafaat.qrapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.abdelrahman.rafaat.qrapp.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BinaryBitmap;
 
@@ -143,11 +144,7 @@ public class MainActivity extends AppCompatActivity {
         BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
         String file;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
-            file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        } else {
-            file = Environment.getExternalStorageDirectory().toString();
-        }
+        file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
         File dir = new File(file + "/QRAPP");
         dir.mkdirs();
@@ -307,9 +304,10 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
         Window window = alertDialog.getWindow();
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.BOTTOM);
-
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setGravity(Gravity.BOTTOM);
+        }
         resultScan.setText(message);
         resultScan.setMovementMethod(new ScrollingMovementMethod());
 
@@ -381,13 +379,5 @@ public class MainActivity extends AppCompatActivity {
         manager.setPrimaryClip(clipData);
         Log.i(TAG, "addDialogNote: copied success");
     }
-
-    /*public void getOpenWhatsIntent() {
-        String url = "https://api.whatsapp.com/send?phone=" + "+02011518483341";
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
-    }
-*/
 
 }
