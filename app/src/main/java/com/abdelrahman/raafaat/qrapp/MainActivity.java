@@ -6,12 +6,12 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,6 +42,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,9 +54,20 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int PICK_IMAGE = 1;
-
     private ActivityMainBinding binding;
+
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), imageUri -> {
+                if (imageUri != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        convertImageToCode(bitmap);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,15 +108,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.scanFromGallery.setOnClickListener(view -> {
-            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            getIntent.setType("image/*");
-            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickIntent.setType("image/*");
-            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-            startActivityForResult(chooserIntent, PICK_IMAGE);
-        });
+        binding.scanFromGallery.setOnClickListener(view -> pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build()));
 
     }
 
@@ -158,26 +167,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intent = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE) {
-            if (data != null) {
-                setImageToImageView(data);
-            }
-        }
         if (intent != null) {
             if (intent.getContents() != null) {
                 showDialog(intent.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    private void setImageToImageView(Intent data) {
-        try {
-            Bitmap bitmapImage = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-            convertImageToCode(bitmapImage);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
