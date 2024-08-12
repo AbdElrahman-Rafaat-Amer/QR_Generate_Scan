@@ -93,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
                 editText.setError(getString(R.string.data_not_complete));
             } else {
                 QRGEncoder encoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 1000);
-                try {
-                    Bitmap bitmap = encoder.encodeAsBitmap();
-                    imageView.setImageBitmap(bitmap);
-                } catch (WriterException e) {
-                    Log.i(TAG, "onCreate: WriterException---------> " + e.getMessage());
-                    Snackbar.make(findViewById(R.id.root_layout), getString(R.string.error_in_generate), Snackbar.LENGTH_SHORT).show();
-                }
+//                try {
+//                    Bitmap bitmap = encoder.encodeAsBitmap();
+//                    imageView.setImageBitmap(bitmap);
+//                } catch (WriterException e) {
+//                    Log.i(TAG, "onCreate: WriterException---------> " + e.getMessage());
+//                    Snackbar.make(findViewById(R.id.root_layout), getString(R.string.error_in_generate), Snackbar.LENGTH_SHORT).show();
+//                }
             }
         });
 
