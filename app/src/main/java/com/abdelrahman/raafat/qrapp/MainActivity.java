@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.qrapp;
+package com.abdelrahman.raafat.qrapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,9 +10,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -34,17 +32,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.abdelrahman.rafaat.qrapp.R;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
-import com.google.zxing.WriterException;
 
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 import java.io.File;
 
 import java.io.FileOutputStream;
@@ -60,16 +61,12 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
-
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     public static final int PICK_IMAGE = 1;
     private EditText editText;
-    private Button generateButton, scanButton, saveButton, galleryButton;
     private ImageView imageView;
+    private Bitmap lastCreatedBitmap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,40 +74,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editText = findViewById(R.id.text_code);
-        generateButton = findViewById(R.id.generate_code);
-        scanButton = findViewById(R.id.scan_code);
-        saveButton = findViewById(R.id.save_image);
-        galleryButton = findViewById(R.id.scan_from_gallery);
         imageView = findViewById(R.id.image_code);
 
-        linkifyMethod();
-
-        generateButton.setOnClickListener(view -> {
+        findViewById(R.id.generate_code).setOnClickListener(view -> {
             String data = editText.getText().toString().trim();
             if (data.isEmpty()) {
                 editText.setError(getString(R.string.data_required));
             }else if (data.length() < 5) {
                 editText.setError(getString(R.string.data_not_complete));
             } else {
-                QRGEncoder encoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 1000);
-//                try {
-//                    Bitmap bitmap = encoder.encodeAsBitmap();
-//                    imageView.setImageBitmap(bitmap);
-//                } catch (WriterException e) {
-//                    Log.i(TAG, "onCreate: WriterException---------> " + e.getMessage());
-//                    Snackbar.make(findViewById(R.id.root_layout), getString(R.string.error_in_generate), Snackbar.LENGTH_SHORT).show();
-//                }
+                try {
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                    lastCreatedBitmap = barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, 1000, 1000);
+                    imageView.setImageBitmap(lastCreatedBitmap);
+            } catch(Exception e) {
+                    Log.i(TAG, "onCreate: WriterException---------> " + e.getMessage());
+                    Snackbar.make(findViewById(R.id.root_layout), getString(R.string.error_in_generate), Snackbar.LENGTH_SHORT).show();
+            }
             }
         });
 
-        scanButton.setOnClickListener(view -> {
+        findViewById(R.id.scan_code).setOnClickListener(view -> {
             IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
             integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
             integrator.setOrientationLocked(false);
             integrator.initiateScan();
         });
 
-        saveButton.setOnClickListener(view -> {
+        findViewById(R.id.save_image).setOnClickListener(view -> {
             if (imageView.getDrawable() != null) {
                 prepareFile();
             } else {
@@ -118,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        galleryButton.setOnClickListener(view -> {
+        findViewById(R.id.scan_from_gallery).setOnClickListener(view -> {
             Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
             getIntent.setType("image/*");
             Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -130,24 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void linkifyMethod() {
-        String text = "number:01151883341 name:abdo amer";
-        String number = text.substring(7, 18);
-        String name = text.substring(24);
-        Log.i(TAG, "linkifyMethod: number-----> " + number);
-        Log.i(TAG, "linkifyMethod: name-------> " + name);
-
-    }
-
     private void prepareFile() {
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        String file;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
-            file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        } else {
-            file = Environment.getExternalStorageDirectory().toString();
-        }
+        String file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
         File dir = new File(file + "/QRAPP");
         dir.mkdirs();
@@ -157,8 +132,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "outFile: " + outFile);
         boolean isExist = outFile.exists();
         Log.i(TAG, "prepareFile: isExist-------> " + isExist);
+        if (lastCreatedBitmap == null){
+            return;
+        }
         try {
-            saveImage(outFile, bitmap);
+            saveImage(outFile, lastCreatedBitmap);
             Log.i(TAG, "prepareFile: saveImage success");
             Snackbar.make(findViewById(R.id.root_layout), getString(R.string.saved_success), Snackbar.LENGTH_SHORT).show();
         } catch (IOException e) {
@@ -381,13 +359,5 @@ public class MainActivity extends AppCompatActivity {
         manager.setPrimaryClip(clipData);
         Log.i(TAG, "addDialogNote: copied success");
     }
-
-    /*public void getOpenWhatsIntent() {
-        String url = "https://api.whatsapp.com/send?phone=" + "+02011518483341";
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
-    }
-*/
 
 }

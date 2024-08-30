@@ -1,4 +1,4 @@
-package com.abdelrahman.rafaat.qrapp;
+package com.abdelrahman.raafat.qrapp;
 
 public enum MessageType {
     PHONE,
