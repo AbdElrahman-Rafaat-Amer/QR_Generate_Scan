@@ -1,13 +1,15 @@
 package com.abdelrahman.raafat.qrapp;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import android.app.AlertDialog;
-
 import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -17,48 +19,36 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-
 import android.provider.ContactsContract;
-
 import android.text.method.ScrollingMovementMethod;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.abdelrahman.raafat.qrapp.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
-
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
-
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
 import java.io.File;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,9 +70,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+            );
+            return insets;
+        });
 
         binding.generateCode.setOnClickListener(view -> {
             String data = binding.textCode.getText().toString().trim();
@@ -149,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         galleryAddPic(outFile.getAbsolutePath());
         outputStream.flush();
         outputStream.close();
-        ;
     }
 
     private String setImageName(String imageName) {
@@ -202,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDialog(String message) {
-
         MessageType messageType = checkMessage(message);
         addDialogNote(messageType, message);
     }
